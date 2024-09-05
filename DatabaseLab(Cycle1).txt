@@ -1,0 +1,136 @@
+13. ALTER TABLE employee ADD manager_id CHAR(5);
+
+14. UPDATE employee SET manager_id = NULL WHERE Id = '101';
+    UPDATE employee SET manager_id = '101' WHERE Id IN ('102', '121', '156');
+    UPDATE employee SET manager_id = '102' WHERE Id IN ('123', '114', '115');
+    UPDATE employee SET manager_id = '121' WHERE Id = '127';
+
+15. SELECT manager_id FROM employee WHERE Name = 'Ram';
+
+16. SELECT e1.Name AS Employee_Name,e2.Name AS Manager_Name
+    FROM employee e1 LEFT JOIN employee e2 
+    ON e1.manager_id = e2.Id;
+
+17. SELECT Dep_Id, AVG(Salary) AS Average_Salary
+    FROM employee GROUP BY Dep_Id;
+
+18. SELECT MAX(Salary) AS Maximum_Salary
+    FROM employee;
+
+19. SELECT Dep_Id, COUNT(*) AS Number_of_Employees FROM employee GROUP BY Dep_Id;
+
+20. SELECT COUNT(DISTINCT Dep_Id) AS Number_of_Departments FROM employee;
+
+21. SELECT DISTINCT Designation FROM employee;
+
+22. SELECT COUNT(DISTINCT Designation) AS Number_of_Different_Designations FROM employee;
+
+23. SELECT MAX(Salary) AS Maximum_Salary_Female FROM employee WHERE Gender = 'F';
+
+24. SELECT Name FROM employee WHERE Designation = 'Typist' AND Gender = 'F';
+
+25. SELECT Name FROM employee WHERE Designation = 'Clerk' AND Gender = 'M' AND Salary > 3000;
+
+26. SELECT * FROM employee WHERE (Designation = 'Manager' OR Designation = 'Analyst') AND Dep_Id = 2;
+
+27. SELECT Designation, Salary FROM employee WHERE Name = 'Ruby';
+
+28. ALTER TABLE employee ADD joining_date DATE;
+
+29. UPDATE employee SET joining_date = '2021-01-15' WHERE Id = '101';
+    UPDATE employee SET joining_date = '2020-06-01' WHERE Id = '102';
+    UPDATE employee SET joining_date = '2021-02-20' WHERE Id = '121';
+    UPDATE employee SET joining_date = '2019-11-25' WHERE Id = '156';
+    UPDATE employee SET joining_date = '2022-03-10' WHERE Id = '123';
+    UPDATE employee SET joining_date = '2022-07-08' WHERE Id = '114';
+    UPDATE employee SET joining_date = '2022-07-08' WHERE Id = '115';
+    UPDATE employee SET joining_date = '2023-05-15' WHERE Id = '127';
+
+30. SELECT * FROM employee ORDER BY joining_date ASC;
+
+31. SELECT * FROM employee ORDER BY Salary DESC;
+
+32. CREATE TABLE DEPARTMENT (Dep_Id NUMERIC(2) PRIMARY KEY,Dname VARCHAR(255));
+
+33. ALTER TABLE employee ADD CONSTRAINT fk_department FOREIGN KEY (Dep_Id) REFERENCES DEPARTMENT(Dep_Id);
+
+34. INSERT INTO DEPARTMENT (Dep_Id, DNAME) VALUES (1, 'DESIGN'), (2, 'CODING'), (3, 'TESTING'), (4, 'RESEARCH');
+
+35. SELECT e.Name, d.DNAME FROM employee e JOIN DEPARTMENT d ON e.Dep_Id = d.Dep_Id;
+
+36. SELECT d.DNAME FROM employee e JOIN DEPARTMENT d ON e.Dep_Id = d.Dep_Id WHERE e.Name = 'Arun';
+
+37. SELECT e.Salary FROM employee e JOIN DEPARTMENT d ON e.Dep_Id = d.Dep_Id WHERE d.DNAME = 'DESIGN';
+
+38. SELECT e.* FROM employee e JOIN DEPARTMENT d ON e.Dep_Id = d.Dep_Id WHERE e.Designation = 'Typist' AND d.DNAME = 'DESIGN';
+
+39. SELECT e.Salary FROM employee e JOIN DEPARTMENT d ON e.Dep_Id = d.Dep_Id WHERE d.DNAME = 'RESEARCH';
+
+40. SELECT e.Name FROM employee e JOIN DEPARTMENT d ON e.Dep_Id = d.Dep_Id WHERE d.DNAME = 'TESTING' AND e.Gender = 'F';
+
+41. SELECT e.* FROM employee e JOIN DEPARTMENT d ON e.Dep_Id = d.Dep_Id WHERE d.DNAME NOT IN ('CODING', 'TESTING');
+
+42. SELECT d.DNAME FROM employee e JOIN DEPARTMENT d ON e.Dep_Id = d.Dep_Id WHERE e.Salary = (SELECT MAX(Salary) FROM employee);
+
+43. SELECT d.DNAME FROM DEPARTMENT d JOIN employee e ON d.Dep_Id = e.Dep_Id GROUP BY d.DNAME HAVING COUNT(e.Id) = (SELECT MIN(EmployeeCount) FROM (SELECT COUNT(*) AS EmployeeCount FROM employee GROUP BY Dep_Id) AS DepartmentCounts);
+
+44. SELECT MAX(Salary) AS Second_Max_Salary FROM employee WHERE Salary < (SELECT MAX(Salary) FROM employee);
+
+45. SELECT MIN(Salary) AS Second_Min_Salary FROM employee WHERE Salary > (SELECT MIN(Salary) FROM employee);
+
+46. SELECT e.Name FROM employee e JOIN DEPARTMENT d ON e.Dep_Id = d.Dep_Id WHERE e.Salary > (SELECT AVG(e2.Salary) FROM employee e2 WHERE e2.Dep_Id = e.Dep_Id);
+
+47. SELECT e.Name FROM employee e JOIN employee m ON e.manager_id = m.Id WHERE m.Name = 'Ram';
+
+48. SELECT e.Dep_Id, COUNT(*) AS Number_of_Dept_Employees FROM employee e GROUP BY e.Dep_Id HAVING COUNT(*) > 3;
+
+49. SELECT e.Dep_Id, MIN(e.Salary) AS Lowest_Salary FROM employee e GROUP BY e.Dep_Id HAVING MIN(e.Salary) > 2500;
+
+50. SELECT e.Name FROM employee e JOIN (SELECT Dep_Id, MAX(Salary) AS Max_Salary FROM employee GROUP BY Dep_Id) AS dept_max ON e.Dep_Id = dept_max.Dep_Id AND e.Salary = dept_max.Max_Salary;
+
+51. SELECT DISTINCT e1.Name FROM Employee_51 e1 JOIN Employee_51 e2 ON e1.Salary > e2.Salary;
+
+52. SELECT DISTINCT e1.Name FROM employee e1 JOIN employee e2 ON e1.Salary <> e2.Salary;
+
+53. ALTER TABLE employee ADD COLUMN city VARCHAR(50);
+    UPDATE employee SET city = 'New York' WHERE Id = '101';
+    UPDATE employee SET city = 'Los Angeles' WHERE Id = '102';
+    UPDATE employee SET city = 'Chicago' WHERE Id = '121';
+    UPDATE employee SET city = 'Boston' WHERE Id = '156';
+    UPDATE employee SET city = 'San Francisco' WHERE Id = '123';
+    UPDATE employee SET city = 'Seattle' WHERE Id = '114';
+    UPDATE employee SET city = 'Miami' WHERE Id = '115';
+    UPDATE employee SET city = 'Dallas' WHERE Id = '127';
+    UPDATE employee SET city = 'Denver' WHERE Id = '130';
+
+
+54. ALTER TABLE DEPARTMENT ADD COLUMN city VARCHAR(50);
+    UPDATE DEPARTMENT SET city = 'New York' WHERE Dep_Id = 1;
+    UPDATE DEPARTMENT SET city = 'Los Angeles' WHERE Dep_Id = 2;
+    UPDATE DEPARTMENT SET city = 'Chicago' WHERE Dep_Id = 3;
+    UPDATE DEPARTMENT SET city = 'Miami' WHERE Dep_Id = 4;
+
+
+55. SELECT e.Name FROM employee e JOIN DEPARTMENT d ON e.Dep_Id = d.Dep_Id WHERE e.city = d.city;
+
+56. SELECT d.DNAME FROM employee e JOIN DEPARTMENT d ON e.Dep_Id = d.Dep_Id GROUP BY d.DNAME ORDER BY SUM(e.Salary) LIMIT 1;
+
+57. SELECT Name FROM employee WHERE YEAR(joining_date) BETWEEN 2019 AND 2020;
+
+58. SELECT Name FROM employee WHERE MONTH(joining_date) = 11;
+
+59. SELECT * FROM DEPARTMENT d WHERE NOT EXISTS (SELECT 1 FROM employee e WHERE e.Dep_Id = d.Dep_Id);
+
+60. SELECT d.* FROM DEPARTMENT d JOIN employee e ON d.Dep_Id = e.Dep_Id GROUP BY d.Dep_Id HAVING COUNT(e.Id) > 2;
+
+61. SELECT e.Dep_Id, COUNT(*) AS num_employees FROM employee e GROUP BY e.Dep_Id HAVING COUNT(e.Id) > 4 AND SUM(e.Salary > 5000) > 0;
+
+62. INSERT INTO employee (Id, Dep_Id, Name, Designation, Salary, Gender, city) VALUES ('130', NULL, 'John', 'Intern', 2000, 'M', 'New York');
+
+63. SELECT e.Name, COALESCE(e.Dep_Id, 'null') AS Dep_Id FROM employee e;
+
+64. SELECT e.Name, COALESCE(e.Dep_Id, 0) AS Dep_Id FROM employee e;
+
+
+
+
