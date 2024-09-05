@@ -1,0 +1,213 @@
+-- Create the LANGUAGE table
+CREATE TABLE LANGUAGE (
+    Language_Id INT PRIMARY KEY,
+    Name VARCHAR(255) NOT NULL
+);
+
+-- Create the PUBLISHER table
+CREATE TABLE PUBLISHER (
+    Publisher_Id INT PRIMARY KEY,
+    Name VARCHAR(255) NOT NULL,
+    Address VARCHAR(255) NOT NULL
+);
+
+-- Create the BOOK table
+CREATE TABLE BOOK (
+    Book_Id INT PRIMARY KEY,
+    Title VARCHAR(255) NOT NULL,
+    Language_Id INT,
+    MRP DECIMAL(10, 2),
+    Publisher_Id INT,
+    Published_Date DATE,
+    Volume INT,
+    Status VARCHAR(50),
+    FOREIGN KEY (Language_Id) REFERENCES LANGUAGE(Language_Id),
+    FOREIGN KEY (Publisher_Id) REFERENCES PUBLISHER(Publisher_Id)
+);
+
+-- Create the AUTHOR table
+CREATE TABLE AUTHOR (
+    Author_Id INT PRIMARY KEY,
+    Name VARCHAR(255) NOT NULL,
+    Email VARCHAR(255),
+    Phone_Number VARCHAR(20),
+    Status VARCHAR(50)
+);
+
+-- Create the BOOK_AUTHOR table (many-to-many relationship)
+CREATE TABLE BOOK_AUTHOR (
+    Book_Id INT,
+    Author_Id INT,
+    PRIMARY KEY (Book_Id, Author_Id),
+    FOREIGN KEY (Book_Id) REFERENCES BOOK(Book_Id),
+    FOREIGN KEY (Author_Id) REFERENCES AUTHOR(Author_Id)
+);
+
+-- Create the MEMBER table
+CREATE TABLE MEMBER (
+    Member_Id INT PRIMARY KEY,
+    Name VARCHAR(255) NOT NULL,
+    Branch_Code VARCHAR(50),
+    Roll_Number VARCHAR(50),
+    Phone_Number VARCHAR(20),
+    Email_Id VARCHAR(255),
+    Date_of_Join DATE,
+    Status VARCHAR(50)
+);
+
+-- Create the BOOK_ISSUE table
+CREATE TABLE BOOK_ISSUE (
+    Issue_Id INT PRIMARY KEY,
+    Date_Of_Issue DATE NOT NULL,
+    Book_Id INT,
+    Member_Id INT,
+    Expected_Date_Of_Return DATE NOT NULL,
+    Status VARCHAR(50),
+    FOREIGN KEY (Book_Id) REFERENCES BOOK(Book_Id),
+    FOREIGN KEY (Member_Id) REFERENCES MEMBER(Member_Id)
+);
+
+-- Create the BOOK_RETURN table
+CREATE TABLE BOOK_RETURN (
+    Issue_Id INT PRIMARY KEY,
+    Actual_Date_Of_Return DATE,
+    LateDays INT,
+    LateFee DECIMAL(10, 2),
+    FOREIGN KEY (Issue_Id) REFERENCES BOOK_ISSUE(Issue_Id)
+);
+
+-- Create the LATE_FEE_RULE table
+CREATE TABLE LATE_FEE_RULE (
+    FromDays INT,
+    ToDays INT,
+    Amount DECIMAL(10, 2),
+    PRIMARY KEY (FromDays, ToDays)
+);
+
+
+
+
+
+
+
+
+
+-- Drop BOOK_RETURN table
+DROP TABLE BOOK_RETURN;
+
+-- Drop BOOK_ISSUE table
+DROP TABLE BOOK_ISSUE;
+
+-- Drop BOOK_AUTHOR table
+DROP TABLE BOOK_AUTHOR;
+
+-- Drop BOOK table
+DROP TABLE BOOK;
+
+-- Drop MEMBER table
+DROP TABLE MEMBER;
+
+-- Drop AUTHOR table
+DROP TABLE AUTHOR;
+
+-- Drop PUBLISHER table
+DROP TABLE PUBLISHER;
+
+-- Drop LANGUAGE table
+DROP TABLE LANGUAGE;
+
+
+
+
+
+-- Drop tables without considering constraints
+DROP TABLE LATE_FEE_RULE;
+
+DROP TABLE BOOK_AUTHOR;
+
+DROP TABLE AUTHOR;
+
+DROP TABLE MEMBER;
+
+DROP TABLE BOOK_RETURN;
+
+DROP TABLE BOOK_ISSUE;
+
+DROP TABLE BOOK;
+
+DROP TABLE PUBLISHER;
+
+DROP TABLE LANGUAGE;
+
+
+
+
+
+
+
+
+-- Drop tables without considering constraints
+DROP TABLE LATE_FEE_RULE;
+
+DROP TABLE BOOK_AUTHOR;
+
+DROP TABLE AUTHOR;
+
+DROP TABLE MEMBER;
+
+DROP TABLE BOOK_RETURN;
+
+DROP TABLE BOOK_ISSUE;
+
+DROP TABLE BOOK;
+
+DROP TABLE PUBLISHER;
+
+DROP TABLE LANGUAGE;
+
+
+
+
+
+
+-- Add a new column to the BOOK table
+ALTER TABLE BOOK ADD Edition VARCHAR(50);
+
+-- Modify an existing column in the MEMBER table
+ALTER TABLE MEMBER MODIFY Phone_Number VARCHAR(30);
+
+-- Drop a column from the MEMBER table
+ALTER TABLE MEMBER DROP COLUMN Status;
+ -- Add foreign key constraint to BOOK table
+ALTER TABLE BOOK
+ADD CONSTRAINT FK_Language
+FOREIGN KEY (Language_Id) REFERENCES LANGUAGE(Language_Id);
+
+ALTER TABLE BOOK
+ADD CONSTRAINT FK_Publisher
+FOREIGN KEY (Publisher_Id) REFERENCES PUBLISHER(Publisher_Id);
+
+-- Add foreign key constraint to BOOK_ISSUE table
+ALTER TABLE BOOK_ISSUE
+ADD CONSTRAINT FK_Book
+FOREIGN KEY (Book_Id) REFERENCES BOOK(Book_Id);
+
+ALTER TABLE BOOK_ISSUE
+ADD CONSTRAINT FK_Member
+FOREIGN KEY (Member_Id) REFERENCES MEMBER(Member_Id);
+
+-- Add foreign key constraint to BOOK_RETURN table
+ALTER TABLE BOOK_RETURN
+ADD CONSTRAINT FK_Issue
+FOREIGN KEY (Issue_Id) REFERENCES BOOK_ISSUE(Issue_Id);
+
+
+-- Add primary key constraint to BOOK_AUTHOR table
+ALTER TABLE BOOK_AUTHOR
+ADD CONSTRAINT PK_Book_Author
+PRIMARY KEY (Book_Id, Author_Id);
+
+-- Add primary key constraint to LATE_FEE_RULE table
+ALTER TABLE LATE_FEE_RULE
+ADD CONSTRAINT PK_Late_Fee_Rule
+PRIMARY KEY (FromDays, ToDays);
